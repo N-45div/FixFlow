@@ -1,8 +1,8 @@
 {
-  "name": "fixflow-voice",
+  "name": "fixflow",
   "version": "1.0.0",
   "private": true,
-  "description": "WhatsApp-first bilingual HVAC and facility maintenance copilot powered by Cerebras and Milvus.",
+  "description": "WhatsApp-native maintenance operations copilot for HVAC and facility teams powered by Gemma on Cerebras.",
   "scripts": {
     "dev": "eve dev",
     "dev:no-ui": "eve dev --no-ui",

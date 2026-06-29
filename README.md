@@ -1,92 +1,112 @@
 # FixFlow
 
-FixFlow is a WhatsApp-first maintenance copilot for HVAC and facility teams. It helps tenants report issues in plain language, gives dispatchers structured triage, and produces technician-friendly next steps powered by Gemma on Cerebras.
+FixFlow is a WhatsApp-native maintenance operations copilot for HVAC and facility teams. It turns messy tenant messages, technician photos, fault screenshots, and manual PDFs into a structured incident workflow powered by Gemma on Cerebras, with fast triage, grounded retrieval, and reusable organizational memory.
 
-## What it does
+## Overview
 
-- accepts WhatsApp text, images, and PDF attachments
-- extracts structured evidence from manuals, screenshots, and equipment photos
-- runs a staged case workflow for intake, clarification, diagnosis, and dispatch
-- combines memory, grounded retrieval, and governed learning
-- replies in short field-friendly WhatsApp messages
+Facility maintenance is still handled through fragmented calls, vague text messages, and tribal knowledge. The result is slow triage, repeated truck rolls, poor handoff quality, and avoidable downtime.
 
-## Why it matters
+FixFlow solves that by giving teams a conversational front door on WhatsApp and an agentic backend that can:
 
-Most maintenance reporting is messy: vague symptoms, missing photos, scattered manuals, and repeated issues that nobody properly documents. FixFlow turns that into a reusable incident workflow instead of another chatbot answer.
+- understand maintenance reports in natural language
+- analyze photos, screenshots, and manuals
+- ask only the highest-value follow-up question
+- generate dispatch-ready and technician-ready outputs
+- learn from past incidents without losing source traceability
 
-The product is designed for:
+## Business Value
 
-- tenants or operators reporting issues
-- dispatchers who need fast triage
-- technicians who need grounded troubleshooting context
+FixFlow is built for operational teams that care about response quality, speed, and auditability.
 
-## Current stack
+Business outcomes:
 
-- `Eve` for agent orchestration and durable state
-- `Cerebras + Gemma` for fast reasoning and multimodal analysis
-- `Twilio WhatsApp` for the user-facing channel
-- `Milvus` plus local JSON fallback for memory
-- `Exa` for trusted-domain grounded web retrieval
+- lower time-to-triage for new incidents
+- fewer repeat visits caused by missing context
+- better technician preparation before arrival
+- faster escalation for safety-critical issues
+- durable playbooks instead of knowledge trapped in people’s heads
 
-## Current status
+## Who It Serves
 
-Working now:
+- `Tenants and operators`
+  Report issues in the most natural way for them: text, images, and PDFs over WhatsApp.
+- `Dispatchers`
+  Receive cleaner incident structure, fewer ambiguous reports, and clearer next actions.
+- `Technicians`
+  Arrive with better context, likely causes, and evidence-backed troubleshooting guidance.
+- `Operations leaders`
+  Build long-term memory and consistent workflows across facilities.
 
-- WhatsApp text intake
-- WhatsApp image intake
-- WhatsApp PDF intake
-- structured triage workflow
-- attachment evidence extraction
-- memory recall and playbook storage
+## Product Capabilities
 
-Not fully finished yet:
+- WhatsApp-first intake for text, images, and PDFs
+- attachment evidence extraction from manuals, nameplates, and screenshots
+- staged case lifecycle across intake, clarification, diagnosis, and dispatch
+- grounded retrieval across memory and trusted external evidence
+- governed self-learning through reusable playbooks and incident memory
+- multilingual-friendly operational messaging
 
-- voice-note transcription on WhatsApp
-- richer dispatcher and technician output formats
-- stronger eval coverage across issue types
+## Why Cerebras Matters
 
-## Retrieval approach
+FixFlow is not just an LLM wrapper. It is a multi-step operational workflow where speed changes usability.
 
-FixFlow is not plain vector-search RAG.
+Cerebras makes it practical to:
 
-The retrieval path is:
+- run faster multi-step triage without losing conversational flow
+- evaluate attachments and structured reasoning within the reply window
+- support agent coordination instead of a single slow monolithic answer
+- make WhatsApp feel like a live operations interface, not an asynchronous ticket form
 
-1. session state
-2. incident and playbook memory recall
-3. grounded lookup across memory and web evidence
-4. trust and freshness scoring
-5. conflict marking before the final answer
+The value is not “fast tokens” by itself. The value is better incident handling because the agent can think, retrieve, and respond before the human workflow stalls.
 
-That makes the system more operationally reliable than a single nearest-neighbor lookup.
+## How It Works
 
-## Repo layout
+1. A user reports a problem on WhatsApp.
+2. FixFlow verifies the inbound Twilio webhook and builds a case context.
+3. Text, image, and PDF evidence are normalized into a structured evidence layer.
+4. The triage engine classifies the issue, identifies blockers, and determines the next best action.
+5. Retrieval combines active case state, memory, and grounded evidence.
+6. The coordinator decides what to ask, recommend, or escalate.
+7. The system responds in short, field-friendly WhatsApp messages.
+8. Resolved cases can later improve long-term memory and reusable playbooks.
 
-- `agent/` core agent, channels, tools, subagents, and runtime logic
-- `docs/` roadmap and architecture notes
-- `evals/` smoke evals
-- `scripts/` ingestion and seeding scripts
-- `data/` local memory fallback data
+## Why This Is Differentiated
 
-The roadmap lives in [docs/roadmap.md](C:/Users/DivijN/Documents/Cerebras%20Hackathon/docs/roadmap.md).
+Most maintenance assistants either stop at chatbot-style Q&A or use shallow retrieval. FixFlow is designed as an operations system:
 
-## Twilio WhatsApp setup
+- `Workflow-aware`
+  It knows whether it should clarify, diagnose, escalate, or dispatch.
+- `Evidence-aware`
+  It uses manuals, screenshots, and photos as operational inputs.
+- `Memory-aware`
+  It stores incident knowledge and reusable lessons over time.
+- `Governed`
+  Learning is not blind accumulation; it is structured and promotion-based.
 
-1. Start the app with `npm run dev`.
-2. Expose it through a public HTTPS tunnel.
-3. Set the Twilio WhatsApp sandbox incoming webhook to your public URL ending in `/incoming`.
-4. Set `TWILIO_WHATSAPP_WEBHOOK_URL` to that same public URL.
-5. Set `TWILIO_MESSAGING_FROM` to your sandbox sender, for example `whatsapp:+14155238886`.
+## Architecture
 
-Optional:
+The system architecture is documented in [ARCHITECTURE.md](C:/Users/DivijN/Documents/Cerebras%20Hackathon/ARCHITECTURE.md).
 
-- set `TWILIO_PHONE_NUMBER` if you want the phone/SMS companion flow
-- set `TWILIO_STATUS_CALLBACK_URL` if you want outbound delivery callbacks
+## Repo Structure
 
-## Environment
+- `agent/` agent runtime, channels, tools, subagents, and core logic
+- `evals/` smoke coverage for core flows
+- `scripts/` ingestion and seeding helpers
+- `data/` local fallback seed data
 
-Copy from `.env.example` and fill what you need.
+## Setup
 
-Most important variables:
+### Core requirements
+
+- Node.js `24.x`
+- Twilio WhatsApp Sandbox or production WhatsApp sender
+- Cerebras API key
+
+### Environment
+
+Start from `.env.example`.
+
+Required variables:
 
 - `CEREBRAS_API_KEY`
 - `TWILIO_ACCOUNT_SID`
@@ -95,16 +115,24 @@ Most important variables:
 - `TWILIO_WHATSAPP_WEBHOOK_URL`
 - `PUBLIC_BASE_URL`
 
-Optional:
+Optional variables:
 
 - `MILVUS_ADDRESS`
 - `MILVUS_TOKEN`
 - `EXA_API_KEY`
+- `TWILIO_PHONE_NUMBER`
+- `TWILIO_STATUS_CALLBACK_URL`
 
-## Local commands
+### Run locally
 
 ```bash
+npm install
 npm run dev
+```
+
+Useful commands:
+
+```bash
 npm run dev:no-ui
 npm run typecheck
 npm run build
@@ -112,12 +140,47 @@ npm run eval
 npm run ingest:manual -- ./path/to/manual.pdf carrier-manual hvac,carrier
 ```
 
-## Demo framing
+## Twilio WhatsApp Configuration
 
-For the hackathon, the strongest story is:
+1. Start the app locally.
+2. Expose it through a public HTTPS tunnel.
+3. Set the Twilio incoming WhatsApp webhook to your public URL ending in `/incoming`.
+4. Set `TWILIO_WHATSAPP_WEBHOOK_URL` to that same public URL.
+5. Join the Twilio sandbox from your device.
+6. Send a maintenance report, image, or PDF to begin testing.
 
-- WhatsApp is the front door
-- Gemma on Cerebras is the decision engine
-- memory makes the system improve over time
-- grounded evidence keeps the workflow auditable
-- speed matters because maintenance triage is operational, not academic
+## Hackathon Positioning
+
+FixFlow is best positioned for:
+
+- `Track 3: Enterprise Impact`
+  It solves a concrete operational problem with measurable productivity and service-quality benefits.
+- `Track 1: Multiverse Agents`
+  It includes structured orchestration, evidence fusion, and multi-step decisioning rather than a single prompt pipeline.
+
+## Current Demo Scope
+
+Best demoable flows right now:
+
+- tenant sends a text complaint
+- tenant sends a photo of equipment or an error screen
+- tenant sends a relevant PDF or manual page
+- FixFlow returns triage guidance and a structured next step
+
+## Status
+
+Implemented:
+
+- WhatsApp text intake
+- WhatsApp image intake
+- WhatsApp PDF intake
+- attachment evidence extraction
+- structured triage workflow
+- grounded retrieval and memory recall
+- governed learning foundations
+
+Still evolving:
+
+- richer technician and dispatcher output packaging
+- stronger evaluation coverage
+- production-grade voice-note handling

@@ -7,6 +7,7 @@ dist/
 build/
 .output/
 .DS_Store
+package-lock.json
 .env
 .env.local
 .env.*.local
