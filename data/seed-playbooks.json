@@ -1,0 +1,21 @@
+[
+  {
+    "title": "Cooling complaint with thermostat powered but no cold air",
+    "text": "If the thermostat is powered and the complaint is no cooling, first verify setpoint, mode, breaker status, filter condition, and whether the indoor unit is running before escalating to compressor or refrigerant hypotheses.",
+    "source": "seed/hvac-basics",
+    "tags": ["hvac", "cooling", "triage"]
+  },
+  {
+    "title": "Water near indoor HVAC equipment",
+    "text": "If water is reported near indoor HVAC equipment, check whether the condensate drain line is blocked, whether the drain pan is overflowing, and whether there is active electrical exposure before recommending further steps.",
+    "source": "seed/hvac-basics",
+    "tags": ["hvac", "leak", "safety"]
+  },
+  {
+    "title": "Burning smell from panel or unit",
+    "text": "A burning smell near an electrical panel or HVAC unit is an escalation condition. Advise the caller not to keep cycling power and route the case for urgent qualified inspection.",
+    "source": "seed/safety",
+    "tags": ["electrical", "critical", "safety"]
+  }
+]
+
