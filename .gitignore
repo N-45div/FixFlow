@@ -1,0 +1,14 @@
+node_modules/
+.eve/
+.codex-runtime/
+.vercel/
+.workflow-data/
+dist/
+build/
+.output/
+.DS_Store
+.env
+.env.local
+.env.*.local
+data/memory.json
+coverage/

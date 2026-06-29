@@ -1,0 +1,40 @@
+{
+  "name": "fixflow-voice",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WhatsApp-first bilingual HVAC and facility maintenance copilot powered by Cerebras and Milvus.",
+  "scripts": {
+    "dev": "eve dev",
+    "dev:no-ui": "eve dev --no-ui",
+    "build": "eve build",
+    "start": "eve start",
+    "typecheck": "tsc --noEmit",
+    "eval": "eve eval",
+    "seed:milvus": "node --import tsx scripts/seed-milvus.ts",
+    "ingest:manual": "node --import tsx scripts/ingest-manual.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@ai-sdk/cerebras": "^3.0.1",
+    "@vercel/connect": "0.2.2",
+    "@zilliz/milvus2-sdk-node": "^2.6.1",
+    "ai": "^7.0.0",
+    "eve": "^0.17.0",
+    "pdf-parse": "^2.4.5",
+    "twilio": "^6.0.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.1",
+    "eslint": "^9.39.4",
+    "just-bash": "^3.0.2",
+    "tsx": "^4.20.6",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}
